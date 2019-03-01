@@ -32,6 +32,7 @@ public class EventsourcingDemoApplication {
 
 	@Scheduled(fixedRate = 2000)
 	public void randomCards() {
+        System.out.println("Sending message...");
 		CreditCard card = new CreditCard(UUID.randomUUID());
 		card.assignLimit(new BigDecimal(2000));
 		card.withdraw(BigDecimal.TEN);
@@ -41,22 +42,22 @@ public class EventsourcingDemoApplication {
 }
 
 
-@RestController
-class CreditCardController {
-    private final KStreamBuilderFactoryBean kStreamBuilderFactoryBean;
+//@RestController
+//class CreditCardController {
+//    private final KStreamBuilderFactoryBean kStreamBuilderFactoryBean;
 
-    CreditCardController(KStreamBuilderFactoryBean kStreamBuilderFactoryBean) {
-        this.kStreamBuilderFactoryBean = kStreamBuilderFactoryBean;
-    }
+//    CreditCardController(KStreamBuilderFactoryBean kStreamBuilderFactoryBean) {
+//        this.kStreamBuilderFactoryBean = kStreamBuilderFactoryBean;
+//    }
 
-    @GetMapping("/cards")
-    List<CreditCard> creditCardList() {
-        List<CreditCard> cards = new ArrayList<>();
-        ReadOnlyKeyValueStore<String, CreditCard> store = kStreamBuilderFactoryBean
-                .getKafkaStreams()
-                .store(KafkaConfiguration.MYFIRST_SNAPSHOTS_FOR_CARDS, keyValueStore());
-
-        store.all().forEachRemaining(stringCreditCardKeyValue -> cards.add(stringCreditCardKeyValue.value));
-        return cards;
-    }
-}
+//    @GetMapping("/cards")
+//    List<CreditCard> creditCardList() {
+//        List<CreditCard> cards = new ArrayList<>();
+//        ReadOnlyKeyValueStore<String, CreditCard> store = kStreamBuilderFactoryBean
+//                .getKafkaStreams()
+//                .store(KafkaConfiguration.MYFIRST_SNAPSHOTS_FOR_CARDS, keyValueStore());
+//
+//        store.all().forEachRemaining(stringCreditCardKeyValue -> cards.add(stringCreditCardKeyValue.value));
+//        return cards;
+//    }
+//}
